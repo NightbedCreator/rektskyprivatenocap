@@ -939,6 +939,31 @@ do
     })
 end
 
+local SpeedV2
+Tabs["Movement"]:CreateToggle({
+    ["Name"] = "SpeedV2",
+    ["Keybind"] = nil,
+    ["Callback"] = function(v)
+    if callback then
+        BindToStepped("SpeedV2", function()
+            if isAlive() then
+                local velo = lplr.Character.Humanoid.MoveDirection * speedval["Value"]
+                lplr.Character.HumanoidRootPart.Velocity = Vector3.new(velo.x, lplr.Character.HumanoidRootPart.Velocity.y, velo.z)
+            end
+        end)
+    else
+        UnbindFromStepped("SpeedV2")
+    end
+end
+})
+speedval = speed.CreateSlider({
+["Name"] = "Speed CFrame Not Normal",
+["Min"] = 1,
+["Max"] = 150,
+["Round"] = 0,
+["Function"] = function() end
+})
+
 local sprint = false
 Tabs["Movement"]:CreateToggle({
     ["Name"] = "Sprint",
@@ -1125,7 +1150,7 @@ funiclonegodmodedisab = Tabs["Movement"]:CreateToggle({
             return
         end
     end
-})--]]
+})
 
 longjumpfuni = Tabs["Movement"]:CreateToggle({
     ["Name"] = "CannonLongJump",
