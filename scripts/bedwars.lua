@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/8pmX8/rektsky4roblox/main/NewRektskyUiLib.lua"))()
+local lib = loadstring(readfile("rektsky/NewRektskyUiLib.lua"))()
 
 local entity = loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/Libraries/entityHandler.lua", true))()
 
@@ -564,7 +564,6 @@ Tabs["Combat"]:CreateToggle({
         end
     end
 })
-end
 
 local TPAURAFUNIv2
 local tpaurafunihaha
@@ -621,7 +620,6 @@ tpaurafunihaha = Tabs["Combat"]:CreateToggle({
         end
     end
 })
-end
 
 local ShieldRemote = getremote(debug.getconstants(debug.getprotos(getmetatable(KnitClient.Controllers.ShieldController).raiseShield)[1]))
 local connectionkaurablock
@@ -647,7 +645,6 @@ Tabs["Combat"]:CreateToggle({
         end
     end
 })
-end
 
 do
     local velohorizontal = {["Value"] = 0}
@@ -938,31 +935,6 @@ do
         ["Round"] = 1
     })
 end
-
-local SpeedV2
-Tabs["Movement"]:CreateToggle({
-    ["Name"] = "SpeedV2",
-    ["Keybind"] = nil,
-    ["Callback"] = function(v)
-    if callback then
-        BindToStepped("SpeedV2", function()
-            if isAlive() then
-                local velo = lplr.Character.Humanoid.MoveDirection * speedval["Value"]
-                lplr.Character.HumanoidRootPart.Velocity = Vector3.new(velo.x, lplr.Character.HumanoidRootPart.Velocity.y, velo.z)
-            end
-        end)
-    else
-        UnbindFromStepped("SpeedV2")
-    end
-end
-})
-speedval = speed.CreateSlider({
-["Name"] = "Speed CFrame Not Normal",
-["Min"] = 1,
-["Max"] = 150,
-["Round"] = 0,
-["Function"] = function() end
-})
 
 local sprint = false
 Tabs["Movement"]:CreateToggle({
@@ -1297,7 +1269,7 @@ local function getcustomassetfunc(path)
             textlabel:Remove()
         end)
         local req = requestfunc({
-            Url = "https://raw.githubusercontent.com/8pmX8/rektsky4roblox/main/"..path:gsub("rektsky/assets", "assets"),
+            Url = "https://raw.githubusercontent.com/8pmX8/rektsky4roblox/main/"..path:gsub("rektsky/sound/mc", "sound/mc"),
             Method = "GET"
         })
         writefile(path, req.Body)
@@ -1306,6 +1278,35 @@ local function getcustomassetfunc(path)
         cachedassets[path] = getasset(path) 
     end
     return cachedassets[path]
+end
+
+local cachedassetssds = {}
+local function getcustomassetthingylol(path)
+    if not betterisfile(path) then
+        spawn(function()
+            local textlabel = Instance.new("TextLabel")
+            textlabel.Size = UDim2.new(1, 0, 0, 36)
+            textlabel.Text = "Downloading "..path
+            textlabel.BackgroundTransparency = 1
+            textlabel.TextStrokeTransparency = 0
+            textlabel.TextSize = 30
+            textlabel.Font = Enum.Font.SourceSans
+            textlabel.TextColor3 = Color3.new(1, 1, 1)
+            textlabel.Position = UDim2.new(0, 0, 0, -36)
+            textlabel.Parent = ScreenGuitwo
+            repeat wait() until betterisfile(path)
+            textlabel:Remove()
+        end)
+        local req = requestfunc({
+            Url = "https://raw.githubusercontent.com/8pmX8/rektsky4roblox/main/"..path:gsub("rektsky/assets", "assets"),
+            Method = "GET"
+        })
+        writefile(path, req.Body)
+    end
+    if cachedassetssds[path] == nil then
+        cachedassetssds[path] = getasset(path) 
+    end
+    return cachedassetssds[path]
 end
 
 local gamesound = require(game:GetService("ReplicatedStorage").TS.sound["game-sound"]).GameSound
@@ -1420,58 +1421,7 @@ Tabs["Render"]:CreateToggle({
     ["Keybind"] = nil,
     ["Callback"] = function(v)
         if v and entity.isAlive then
-local player = game:GetService("Players")
-local lplr = player.LocalPlayer
-if lplr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-      if lplr.Character:FindFirstChild("Torso") then
-        torso = lplr.Character.Torso
-      else
-        torso = lplr.Character.UpperTorso
-      end
-      local CapeP = Instance.new("Part", torso.Parent)
-      CapeP.Name = "Cape"
-      CapeP.Anchored = false
-      CapeP.CanCollide = false
-      CapeP.TopSurface = 0
-      CapeP.BottomSurface = 0
-      CapeP.Color = Color3.fromRGB(255,255,255)
-      CapeP.FormFactor = "Custom"
-      CapeP.Size = Vector3.new(0.2,0.2,0.2)
-      local decal = Instance.new("Decal", CapeP)
-      decal.Texture = "http://www.roblox.com/asset/?id=9600268824"
-      decal.Face = "Back"
-      local msh = Instance.new("BlockMesh", CapeP)
-      msh.Scale = Vector3.new(9,17.5,0.5)
-      local motor = Instance.new("Motor", CapeP)
-      motor.Part0 = CapeP
-      motor.Part1 = torso
-      motor.MaxVelocity = 0.01
-      motor.C0 = CFrame.new(0,1.75,0) * CFrame.Angles(0,math.rad(90),0)
-      motor.C1 = CFrame.new(0,1,0.45) * CFrame.Angles(0,math.rad(90),0)
-      local wave = false
-      repeat wait(1/44)
-        decal.Transparency = torso.Transparency
-        local ang = 0.1
-        local oldmag = torso.Velocity.magnitude
-        local mv = 0.002
-        if wave then
-          ang = ang + ((torso.Velocity.magnitude/10) * 0.05) + 0.05
-          wave = false
-        else
-          wave = true
-        end
-        ang = ang + math.min(torso.Velocity.magnitude/11, 0.5)
-        motor.MaxVelocity = math.min((torso.Velocity.magnitude/111), 0.04) + mv
-        motor.DesiredAngle = -ang
-        if motor.CurrentAngle < -0.2 and motor.DesiredAngle > -0.2 then
-          motor.MaxVelocity = 0.04
-        end
-        repeat wait() until motor.CurrentAngle == motor.DesiredAngle or math.abs(torso.Velocity.magnitude - oldmag) >= (torso.Velocity.magnitude/10) + 1
-        if torso.Velocity.magnitude < 0.1 then
-          wait(0.1)
-        end
-      until not CapeP or CapeP.Parent ~= torso.Parent
-    end
+            Cape(game.Players.LocalPlayer.Character, getcustomassetthingylol("rektsky/cape.png"))
         else
             Cape(game.Players.LocalPlayer.Character, nil)
         end
@@ -1485,7 +1435,7 @@ local function makeRainbowText(text)
         local x = 0
         while wait() do
             colorbox = Color3.fromHSV(x,1,1)
-            x = x + 0.5/255
+            x = x + 10/255
             if x >= 1 then
                 x = 0
             end
@@ -1574,13 +1524,14 @@ Tabs["Render"]:CreateToggle({
     end
 })
 
+local screngiu
 Tabs["Render"]:CreateToggle({
     ["Name"] = "WaterMarks",
     ["Keybind"] = nil,
     ["Callback"] = function(v)
         if entity.isAlive then
             if v then
-                local screngiu = Instance.new("ScreenGui")
+                screngiu = Instance.new("ScreenGui")
                 local Frame = Instance.new("Frame")
                 local UICorner = Instance.new("UICorner")
                 local ImageLabel = Instance.new("ImageLabel")
@@ -1599,7 +1550,7 @@ Tabs["Render"]:CreateToggle({
                 ImageLabel.BackgroundTransparency = 1.000
                 ImageLabel.Position = UDim2.new(0.137143791, 0, 0.0700296983, 0)
                 ImageLabel.Size = UDim2.new(0, 108, 0, 108)
-                ImageLabel.Image = getasset("rektsky/assets/icon.png")
+                ImageLabel.Image = getcustomassetthingylol("rektsky/assets/icon.png")
                 TextLabel.Parent = Frame
                 TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                 TextLabel.BackgroundTransparency = 1.000
@@ -1611,7 +1562,7 @@ Tabs["Render"]:CreateToggle({
                 TextLabel.TextScaled = true
                 TextLabel.TextSize = 14.000
                 TextLabel.TextWrapped = true
-                TextLabel.Text = "RektSky B4 Private"
+                TextLabel.Text = "RektSky B4 Public"
                 makeRainbowText(TextLabel, true)
             else
                 makeRainbowText(TextLabel, false)
@@ -1622,6 +1573,7 @@ Tabs["Render"]:CreateToggle({
     end
 })
 
+--[[
 local ScreenGuie
 Tabs["Render"]:CreateToggle({
     ["Name"] = "KeyStrokes",
@@ -1993,17 +1945,25 @@ Tabs["Exploits"]:CreateToggle({
 local shopthingyshopshop = debug.getupvalue(require(game:GetService("ReplicatedStorage").TS.games.bedwars.shop["bedwars-shop"]).BedwarsShop.getShopItem, 2)
 local oldnexttier
 local oldtiered
+local bypassstpidshoptiers = false
 Tabs["Exploits"]:CreateToggle({
     ["Name"] = "BypassShopTiers",
     ["Keybind"] = nil,
     ["Callback"] = function(v)
-        for i,v in pairs(shopthingyshopshop) do
-            oldtiered = oldtiered or v.tiered
-            oldnexttier = oldnexttier or v.nextTier
-        end
-        for i,v in pairs(shopthingyshopshop) do
-            v.tiered = nil
-            v.nextTier = nil
+        if (bypassstpidshoptiers) then
+            for i,v in pairs(shopthingyshopshop) do
+                oldtiered = oldtiered or v.tiered
+                oldnexttier = oldnexttier or v.nextTier
+            end
+            for i,v in pairs(shopthingyshopshop) do
+                v.tiered = nil
+                v.nextTier = nil
+            end
+        else
+            for i,v in pairs(shopthingyshopshop) do
+                v.tiered = oldtiered
+                v.nextTier = oldnexttier
+            end
         end
     end
 })
@@ -2128,12 +2088,14 @@ Tabs["Player"]:CreateToggle({
 
 function stealcheststrollage()
     for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
-        if v.Name == "chest" and v:FindFirstChild("ChestFolderValue") then
-            local mag = (char.PrimaryPart.Position - v.Position).Magnitude
-            if mag <= 45 then
-                for k,b in pairs(v.ChestFolderValue.Value:GetChildren()) do
-                    if b.Name ~= "ChestOwner" then
-                        game:GetService("ReplicatedStorage").rbxts_include.node_modules.net.out._NetManaged["Inventory:ChestGetItem"]:InvokeServer(v.ChestFolderValue.Value,b)
+        if v.Name == "chest" then
+            if v:FindFirstChild("ChestFolderValue") then
+                local mag = (hrp.Position - v.Position).Magnitude
+                if mag <= 45 then
+                    for k,b in pairs(v.ChestFolderValue.Value:GetChildren()) do
+                        if b.Name ~= "ChestOwner" then
+                            game:GetService("ReplicatedStorage").rbxts_include.node_modules.net.out._NetManaged["Inventory:ChestGetItem"]:InvokeServer(v.ChestFolderValue.Value,b)
+                        end
                     end
                 end
             end
@@ -2173,7 +2135,6 @@ Tabs["Rektsky"]:CreateToggle({
         end
     end
 })
-
 
 Tabs["Rektsky"]:CreateToggle({
     ["Name"] = "FunnyArrayListTroll",
@@ -2264,7 +2225,6 @@ Tabs["Rektsky"]:CreateToggle({
         end
     end
 })
-
 
 -- WORLD
 
@@ -2394,7 +2354,7 @@ function funinuker()
             end
         end
     end
-end-]]
+end
 
 Tabs["World"]:CreateToggle({
     ["Name"] = "BedRekter",
@@ -2406,7 +2366,7 @@ Tabs["World"]:CreateToggle({
                 repeat
                     wait()
                     if entity.isAlive then
-                        wait(0.23)
+                        wait(0.25)
                         if (not bedrekterval) then return end
                         nuker()
                     end
